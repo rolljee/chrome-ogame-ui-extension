@@ -23,46 +23,10 @@ var fn = function () {
       }
 
       if (costs.metal || costs.crystal || costs.deuterium) {
-        _addRessourceCountTimeHelper();
-        _addLimitingReagentHelper();
         _addProductionEconomyTimeTextHelper(costs);
         _addProductionRentabilityTimeTextHelper(costs);
-
-        // for non-commanders only
-        if ($('.commander.on').length === 0) {
-          _addProductionBuildableInTextHelper();
-          _addProductionMaximumBuildableTextHelper(costs);
-        }
       }
     }, 100);
-
-    function _addRessourceCountTimeHelper () {
-      resNames.forEach(function (res) {
-        var $element = $('.' + res + '.tooltip:not(.enhanced)').first();
-        if ($element.find('.' + res).length > 0) {
-          if (availableIn[res] > 0) {
-            $element.append('<div class="enhancement">' + window._time(availableIn[res], -1) + '</div>');
-          }
-
-          $element.addClass('enhanced');
-        }
-      });
-    }
-
-    function _addLimitingReagentHelper () {
-      var limitingreagent = null;
-      ['metal', 'crystal', 'deuterium'].forEach(function (res) {
-        if (availableIn[res] && availableIn[res] > 0) {
-          if (limitingreagent === null || availableIn[res] > availableIn[limitingreagent]) {
-            limitingreagent = res;
-          }
-        }
-      });
-
-      if (limitingreagent) {
-        $('.' + limitingreagent + '.tooltip.enhanced:not(.limitingreagent)').addClass('limitingreagent');
-      }
-    }
 
     function _addProductionEconomyTimeTextHelper (costs) {
       var $el = $('#content .production_info:not(.enhanced-economy-time)');
@@ -78,34 +42,6 @@ var fn = function () {
       $el.append('<li class="enhancement">' + window._translate('ECONOMY_TIME', {
         time: window._time(totalPrice / totalProd)
       }) + '</li>');
-    }
-
-    function _addProductionBuildableInTextHelper () {
-      var $el = $('#content .production_info:not(.enhanced-buildable-in)');
-      $el.addClass('enhanced-buildable-in');
-
-      var availableInMax = Math.max(availableIn.metal, availableIn.crystal, availableIn.deuterium);
-
-      if (availableInMax > 0) {
-        $el.append('<li class="enhancement">' + window._translate('BUILDABLE_IN', {
-          time: window._time(availableInMax, -1)
-        }) + '</li>');
-      }
-    }
-
-    function _addProductionMaximumBuildableTextHelper (costs) {
-      var $amount = $('#content .amount:not(.enhanced)');
-      if ($amount.length > 0) {
-        var maxMetal = resources.metal.now / costs.metal;
-        var maxCrystal = resources.crystal.now / costs.crystal;
-        var maxDeuterium = resources.deuterium.now / costs.deuterium;
-        var max = Math.floor(Math.min(maxMetal, maxCrystal, maxDeuterium));
-        if (isFinite(max)) {
-          $amount.append('<span class="enhancement"> (Max: ' + max + ')</span>');
-        }
-
-        $amount.addClass('enhanced');
-      }
     }
 
     function _addProductionRentabilityTimeTextHelper () {

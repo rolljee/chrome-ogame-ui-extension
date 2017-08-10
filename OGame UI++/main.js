@@ -28,6 +28,9 @@ imgScript.parentNode.removeChild(imgScript);
 var userscript = function () {
   'use strict';
 
+  // set if user is commander or not
+  window.isCommander = $('.commander.on').length ? true : false;
+
   // window.config default values
   window.config = window._getConfig();
   window._setConfigTradeRate();
@@ -36,12 +39,8 @@ var userscript = function () {
 
   // Add tabs in the left menu
   window._addTabAlliance();
-  window._addTabIdlePlayers();
   window._addTabStats();
   window._addTabTopflop();
-  window._addTabNeighbors();
-  window._addTabSimulator();
-  window._addTabWarRiders();
   window._addTabSettings();
 
   // Add static helpers
